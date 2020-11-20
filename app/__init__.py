@@ -3,7 +3,7 @@ from app.auth import authModule
 from werkzeug import exceptions
 from app.handle_error import (handleNotFoundError, handleNotImplementedError,
                               handleMethodNotAllowedError, handleGenericError)
-from app.models import initApp as initAuthModels
+from app.models import initApp as initDbModel
 from config import Config
 
 
@@ -13,7 +13,7 @@ def createApiApp():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    initAuthModels(app)
+    initDbModel(app)
 
     # add routing
     app.register_blueprint(authModule, url_prefix="/auth")
