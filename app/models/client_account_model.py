@@ -7,8 +7,8 @@ class ClientAccount(db.Model):
     password_hash = db.Column(db.String(128))
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
-    address = db.Column(db.String(256), index=True, unique=True)
-    phone = db.Column(db.String(30))
+    address = db.Column(db.String(256), nullable=True)
+    phone = db.Column(db.String(30), nullable=True)
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'))
 
     def __repr__(self):
