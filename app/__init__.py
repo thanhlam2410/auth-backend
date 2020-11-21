@@ -2,9 +2,10 @@ from flask import Flask, jsonify
 from app.auth import authModule
 from werkzeug import exceptions
 from app.handle_error import (handleNotFoundError, handleNotImplementedError,
-                              handleMethodNotAllowedError, handleGenericError)
+                              handleMethodNotAllowedError, handleGenericError, handleValidationError)
 from app.models import initApp as initDbModel
 from config import Config
+from jsonschema import ValidationError
 
 
 def createApiApp():
@@ -19,6 +20,7 @@ def createApiApp():
     app.register_blueprint(authModule, url_prefix="/auth")
 
     # add error handler
+    app.register_error_handler(ValidationError, handleValidationError)
     app.register_error_handler(exceptions.NotFound, handleNotFoundError)
     app.register_error_handler(
         exceptions.NotImplemented, handleNotImplementedError)

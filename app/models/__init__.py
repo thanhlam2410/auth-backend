@@ -1,6 +1,7 @@
 from app.models.global_scope import db, migrate, seeder
 from app.models.user_model import User
-from app.models.client_account_model import ClientAccount, Country
+from app.models.client_account_model import ClientAccount
+from app.models.country_model import Country
 from flask import Flask
 
 

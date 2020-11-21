@@ -20,3 +20,7 @@ def handleMethodNotAllowedError(err: exceptions.MethodNotAllowed):
 def handleGenericError(err):
     print("got error", err)
     return 'Got Error', 500
+
+
+def handleValidationError(err):
+    return err.message, 400

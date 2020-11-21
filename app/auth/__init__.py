@@ -1,17 +1,5 @@
-from flask import Blueprint, request
-from werkzeug import exceptions
-
-authModule = Blueprint('auth', __name__)
-
-# register routes
-
-
-@authModule.route('/login', methods=['GET', 'POST'])
-def doLogin():
-    print(request)
-    raise exceptions.NotImplemented("API is under construction")
-
-
-@authModule.route('/logout', methods=['POST'])
-def doLogout():
-    raise exceptions.NotImplemented("API is under construction")
+from app.auth.global_scope import authModule
+import app.auth.register
+import app.auth.login
+import app.auth.logout
+from flask import Response
