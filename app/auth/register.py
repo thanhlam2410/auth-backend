@@ -2,8 +2,8 @@ from app.auth import authModule
 from werkzeug import exceptions
 from flask import request
 from jsonschema import validate
-from app.models import ClientAccount, Country, db
-from werkzeug.security import generate_password_hash
+from app.models import ClientAccount, Country
+from flask.json import jsonify
 
 schema = {
     "type": "object",
@@ -21,25 +21,35 @@ schema = {
 @authModule.route('/register', methods=['POST'])
 def doRegister():
     input = request.get_json()
-    validate(input, schema=schema)
+    validate(
+        instance=input, schema=schema)
 
-    existingUser = ClientAccount.query.filter_by(email=input["email"]).first()
-    country = Country.query.filter_by(code=input["country"]).first()
+    isEmailExisted = checkExistingEmail(email=input["email"])
+    print("isEmailExisted", isEmailExisted)
+    if (isEmailExisted):
+        return {"error": "email is used"}, 400
 
-    print(existingUser)
-    if existingUser:
-        return "email_is_used", 400
+    countryId = getCountryId(code=input["country"])
+    if (countryId is None):
+        return {"error": "invalid country"}, 400
 
-    passwordHash = generate_password_hash(input["password"])
-    countryId = None
+    user = ClientAccount.createClientUser(
+        email=input["email"], password=input["password"], firstName=input["firstName"], lastName=input["lastName"], countryId=countryId)
 
-    if country is not None:
-        countryId = country.id
+    return jsonify(user.toDict())
 
-    user = ClientAccount(email=input["email"], password_hash=passwordHash,
-                         first_name=input["firstName"], last_name=input["lastName"], country_id=countryId)
 
-    db.session.add(user)
-    db.session.commit()
+def checkExistingEmail(email):
+    user = ClientAccount.query.filter_by(email=email).first()
+    if user is None:
+        return False
+    else:
+        return True
 
-    return 'OK'
+
+def getCountryId(code):
+    country = Country.getCountryFromCode(code=code)
+    if country is None:
+        return None
+    else:
+        return country.id

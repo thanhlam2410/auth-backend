@@ -1,4 +1,5 @@
 from app.models import db, migrate
+from werkzeug.security import generate_password_hash
 
 
 class ClientAccount(db.Model):
@@ -13,3 +14,18 @@ class ClientAccount(db.Model):
 
     def __repr__(self):
         return '<ClientAccount {}>'.format(self.email)
+
+    def toDict(self):
+        return {
+            "id": self.id,
+            "firstName": self.first_name,
+            "lastName": self.last_name,
+            "email": self.email
+        }
+
+    @staticmethod
+    def createClientUser(email, password, firstName, lastName, countryId):
+        clientAccount = ClientAccount(email=email, password_hash=generate_password_hash(password), first_name=firstName, last_name=lastName, country_id=countryId)
+        db.session.add(clientAccount)
+        db.session.commit()
+        return clientAccount

@@ -3,16 +3,16 @@ from app.auth import authModule
 from werkzeug import exceptions
 from app.handle_error import (handleNotFoundError, handleNotImplementedError,
                               handleMethodNotAllowedError, handleGenericError, handleValidationError)
-from app.models import initApp as initDbModel
+from app.models import initApp as initDbModel, db
 from config import Config
 from jsonschema import ValidationError
 
 
-def createApiApp():
-    print(Config)
+def createApiApp(appConfig=Config):
+    print(appConfig)
 
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(appConfig)
 
     initDbModel(app)
 
