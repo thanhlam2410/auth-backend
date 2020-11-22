@@ -18,3 +18,16 @@ Please provide:
 * Well commented code that can serve as documentation of the  system.
 
 Bonus points: Add a script that tests the API end-to-end that can be used as an automated regression test.
+
+## Run Unit Tests
+
+``` shell
+pytest
+```
+
+## Run Unit Tests Coverage
+
+```shell
+coverage run ./tests/*
+coverage html ./app/*.py 
+```
