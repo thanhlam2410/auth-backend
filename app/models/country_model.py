@@ -8,3 +8,7 @@ class Country(db.Model):
 
     def __repr__(self):
         return '<Country {}>'.format(self.id)
+
+    @staticmethod
+    def getCountryFromCode(code):
+        return Country.query.filter_by(code=code).first()
