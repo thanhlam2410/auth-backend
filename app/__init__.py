@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from app.auth import authModule
+from app.profile import profileModule
 from werkzeug import exceptions
 from app.handle_error import (handleNotFoundError, handleNotImplementedError,
                               handleMethodNotAllowedError, handleGenericError, handleValidationError)
@@ -18,6 +19,7 @@ def createApiApp(appConfig=Config):
 
     # add routing
     app.register_blueprint(authModule, url_prefix="/auth")
+    app.register_blueprint(profileModule, url_prefix="/profile")
 
     # add error handler
     app.register_error_handler(ValidationError, handleValidationError)
