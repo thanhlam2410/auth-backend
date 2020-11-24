@@ -1,14 +1,12 @@
-
 #!/usr/bin/env python
 import unittest
-import sys
-from app.models import db, Country
+from app.models import db, Country, ClientAccount
 import json
 from .setup import setupTestEnvironment, destroyTestEnvironment
 
 
 def seedData():
-    country = Country(code='VN', name='Viet Nam')
+    country = Country(code="VN", name="Viet Nam")
     db.session.add(country)
     db.session.commit()
 
@@ -24,15 +22,38 @@ class RegisterTest(unittest.TestCase):
 
     def postRegister(self, email, password, firstName, lastName, country):
         return self.client.post(
-            '/auth/register',
-            data=json.dumps(dict(email=email, password=password,
-                                 firstName=firstName, lastName=lastName, country=country)),
-            content_type='application/json'
+            "/auth/register",
+            data=json.dumps(
+                dict(
+                    email=email,
+                    password=password,
+                    firstName=firstName,
+                    lastName=lastName,
+                    country=country,
+                )
+            ),
+            content_type="application/json",
         )
 
     def test_register(self):
         response = self.postRegister(
-            'lamttt@mailnesia.com', 'test password', 'lam', 'tran', 'VN')
+            "lamttt@mailnesia.com", "test password", "lam", "tran", "VN"
+        )
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            response.data, b'{"email":"lamttt@mailnesia.com","firstName":"lam","id":1,"lastName":"tran"}\n')
+            response.data,
+            b'{"email":"lamttt@mailnesia.com","firstName":"lam","id":1,"lastName":"tran"}\n',
+        )
+
+        record = ClientAccount.getUserByEmail(email="lamttt@mailnesia.com")
+        self.assertIsNotNone(record)
+        self.assertEqual(
+            record.toDict(),
+            {
+                "email": "lamttt@mailnesia.com",
+                "firstName": "lam",
+                "id": 1,
+                "lastName": "tran",
+            },
+        )

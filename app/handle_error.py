@@ -3,7 +3,6 @@ from werkzeug import exceptions
 
 
 def handleNotFoundError(err: exceptions.NotFound):
-    print("got NotFound error", err)
     return jsonify({"error": "Not Found"}), 404
 
 
@@ -18,7 +17,7 @@ def handleMethodNotAllowedError(err: exceptions.MethodNotAllowed):
 
 
 def handleGenericError(err):
-    print("got error", err.message)
+    print("got error", err)
     return err, 500
 
 

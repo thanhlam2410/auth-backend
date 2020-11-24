@@ -1,6 +1,6 @@
 from app.auth.helper import generateJWTToken, generateUUID
 from app.auth import authModule
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from app.models import ClientAccount
 import datetime
 from jsonschema import validate
@@ -27,6 +27,7 @@ def forgotPassword():
         userId=user.id,
         sessionId=sessionId,
         expire=datetime.datetime.utcnow() + datetime.timedelta(seconds=300),
+        jwtSecret=current_app.config.get("JWT_SECRET_KEY"),
     )
 
     sendResetPasswordEmail(token=token)

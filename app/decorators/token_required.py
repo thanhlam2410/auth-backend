@@ -1,9 +1,9 @@
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 import jwt
 from app.models import Session, ClientAccount
 
 
-def token_required(jwtSecret):
+def token_required():
     def decorator(f):
         def wrapper(*args, **kwargs):
             token = None
@@ -15,7 +15,8 @@ def token_required(jwtSecret):
                 return jsonify({"error": "Unauthorized"}), 401
 
             try:
-                data = jwt.decode(token, jwtSecret)
+                jwtSecret = (current_app.config.get("JWT_SECRET_KEY"),)
+                data = jwt.decode(token, jwtSecret, algorithms="HS256")
                 session = Session.query.filter_by(sessionId=data["sessionId"]).first()
 
                 if session.isValid is False:

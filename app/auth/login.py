@@ -1,7 +1,7 @@
 import datetime
 from app.models import Session
 from .global_scope import authModule
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from app.models import ClientAccount
 from .helper import generateJWTToken, generateUUID
 from jsonschema import validate
@@ -41,6 +41,7 @@ def doLogin():
         user.id,
         sessionId=sessionId,
         expire=datetime.datetime.utcnow() + datetime.timedelta(days=1),
+        jwtSecret=current_app.config.get("JWT_SECRET_KEY"),
     )
     Session.createSession(userId=user.id, sessionId=sessionId)
 

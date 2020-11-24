@@ -1,8 +1,7 @@
 from app.models import ClientAccount, db
-from flask.json import jsonify
+from flask.json import jsonify, current_app
 from app.auth import authModule
 from flask import request
-from .global_scope import jwtSecret
 import jwt
 from jsonschema import validate
 
@@ -18,7 +17,10 @@ def changePassword():
     input = request.get_json()
     validate(instance=input, schema=schema)
 
-    data = verifyJWTToken(token=input["token"])
+    data = verifyJWTToken(
+        token=input["token"],
+        jwtSecret=current_app.config.get("JWT_SECRET_KEY"),
+    )
 
     if data is None:
         return jsonify({"error": "Invalid Token"}), 400
@@ -32,7 +34,7 @@ def changePassword():
     return jsonify({"success": True})
 
 
-def verifyJWTToken(token: str):
+def verifyJWTToken(token: str, jwtSecret: str):
     try:
         return jwt.decode(token, jwtSecret)
     except:
