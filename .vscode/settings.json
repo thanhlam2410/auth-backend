@@ -30,7 +30,7 @@
             }
         ]
     },
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.9/bin/python3.9",
+    "python.pythonPath": "windows-venv\\Scripts\\python.exe",
     "python.analysis.completeFunctionParens": true,
     "python.formatting.provider": "black"
 }

@@ -23,6 +23,9 @@ class ClientAccount(db.Model):
             "email": self.email,
         }
 
+    def changePassword(self, password):
+        self.password_hash = generate_password_hash(password=password)
+
     def checkPassword(self, password):
         return check_password_hash(pwhash=self.password_hash, password=password)
 
@@ -37,4 +40,14 @@ class ClientAccount(db.Model):
         )
         db.session.add(clientAccount)
         db.session.commit()
+        return clientAccount
+
+    @staticmethod
+    def getUserByEmail(email: str):
+        clientAccount = ClientAccount.query.filter_by(email=email).first()
+        return clientAccount
+
+    @staticmethod
+    def getUserById(userId: str):
+        clientAccount = ClientAccount.query.filter_by(id=userId).first()
         return clientAccount

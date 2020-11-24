@@ -1,9 +1,10 @@
+import datetime
 from app.models import Session
-from .global_scope import authModule, jwtSecret
+from .global_scope import authModule
 from flask import request, jsonify
 from app.models import ClientAccount
-import jwt
-import uuid
+from .helper import generateJWTToken, generateUUID
+from jsonschema import validate
 
 schema = {
     "type": "object",
@@ -21,6 +22,8 @@ schema = {
 @authModule.route("/login", methods=["POST"])
 def doLogin():
     input = request.get_json()
+    validate(instance=input, schema=schema)
+
     user = ClientAccount.query.filter_by(email=input["email"]).first()
 
     if user is None:
@@ -34,18 +37,12 @@ def doLogin():
     Session.revokeAllToken(user.id)
 
     sessionId = generateUUID()
-    accessToken = generateJWTToken(user.id, sessionId=sessionId)
+    accessToken = generateJWTToken(
+        user.id,
+        sessionId=sessionId,
+        expire=datetime.datetime.utcnow() + datetime.timedelta(days=1),
+    )
     Session.createSession(userId=user.id, sessionId=sessionId)
 
     # return "OK"
     return jsonify({"accessToken": accessToken})
-
-
-def generateJWTToken(userId, sessionId):
-    return jwt.encode(
-        {"userId": userId, "sessionId": sessionId}, jwtSecret, algorithm="HS256"
-    ).decode("utf-8")
-
-
-def generateUUID():
-    return str(uuid.uuid4())
