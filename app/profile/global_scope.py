@@ -1,4 +1,5 @@
 from flask import Blueprint, request
-from werkzeug import exceptions
+import os
 
-profileModule = Blueprint('profile', __name__)
+jwtSecret = os.environ.get("JWT_SECRET_KEY")
+profileModule = Blueprint("profile", __name__)

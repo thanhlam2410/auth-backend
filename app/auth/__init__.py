@@ -1,6 +1,6 @@
-from app.auth.global_scope import authModule
+from .global_scope import authModule
 from .register import *
 from .login import *
 from .logout import *
-from flask import Response, Flask
-from config import Config
+from .change_password import *
+from .forgot_password import *
