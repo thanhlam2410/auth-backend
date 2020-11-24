@@ -1,1 +1,1 @@
-import app.decorators.token_required
+from .token_required import token_required

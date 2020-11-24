@@ -10,10 +10,8 @@ class Session(db.Model):
     def __repr__(self):
         return "<Session {}>".format(self.id)
 
-    def invalidateSession(userId):
-        query = db.session.query(Session).filter(userId=userId, isValid=True)
-        query.update({Session.isValid: False}, synchronize_session=False)
-        db.session.commit()
+    def invalidateSession(self):
+        self.isValid = False
 
     @staticmethod
     def findSession(sessionId):
@@ -29,3 +27,10 @@ class Session(db.Model):
         db.session.add(session)
         db.session.commit()
         return session
+
+    @staticmethod
+    def revokeAllToken(userId):
+        Session.query.filter_by(userId=userId).update(
+            {Session.isValid: False}, synchronize_session=False
+        )
+        db.session.commit()

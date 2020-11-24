@@ -31,6 +31,8 @@ def doLogin():
     if isValid is False:
         return jsonify({"error": "email and password does not match"}), 400
 
+    Session.revokeAllToken(user.id)
+
     sessionId = generateUUID()
     accessToken = generateJWTToken(user.id, sessionId=sessionId)
     Session.createSession(userId=user.id, sessionId=sessionId)
