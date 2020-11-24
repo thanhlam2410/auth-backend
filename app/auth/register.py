@@ -1,5 +1,4 @@
-from app.auth import authModule
-from werkzeug import exceptions
+from .global_scope import authModule
 from flask import request
 from jsonschema import validate
 from app.models import ClientAccount, Country
@@ -8,33 +7,37 @@ from flask.json import jsonify
 schema = {
     "type": "object",
     "properties": {
-            "firstName": {"type": "string", "minLength": 2, "maxLength": 100},
-            "lastName": {"type": "string", "minLength": 2, "maxLength": 100},
-            "email": {"type": "string", "format": "email"},
-            "password": {"type": "string", "minLength": 8, "maxLength": 32},
-            "country": {"type": "string", "enum": ["VN", "SG"]}
+        "firstName": {"type": "string", "minLength": 2, "maxLength": 100},
+        "lastName": {"type": "string", "minLength": 2, "maxLength": 100},
+        "email": {"type": "string", "format": "email"},
+        "password": {"type": "string", "minLength": 8, "maxLength": 32},
+        "country": {"type": "string", "enum": ["VN", "SG"]},
     },
-    "required": ["firstName", "lastName", "email", "password", "country"]
+    "required": ["firstName", "lastName", "email", "password", "country"],
 }
 
 
-@authModule.route('/register', methods=['POST'])
+@authModule.route("/register", methods=["POST"])
 def doRegister():
     input = request.get_json()
-    validate(
-        instance=input, schema=schema)
+    validate(instance=input, schema=schema)
 
     isEmailExisted = checkExistingEmail(email=input["email"])
     print("isEmailExisted", isEmailExisted)
-    if (isEmailExisted):
+    if isEmailExisted:
         return {"error": "email is used"}, 400
 
     countryId = getCountryId(code=input["country"])
-    if (countryId is None):
+    if countryId is None:
         return {"error": "invalid country"}, 400
 
     user = ClientAccount.createClientUser(
-        email=input["email"], password=input["password"], firstName=input["firstName"], lastName=input["lastName"], countryId=countryId)
+        email=input["email"],
+        password=input["password"],
+        firstName=input["firstName"],
+        lastName=input["lastName"],
+        countryId=countryId,
+    )
 
     return jsonify(user.toDict())
 

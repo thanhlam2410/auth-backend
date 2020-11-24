@@ -1,4 +1,4 @@
-from app.models import db, migrate
+from app.models import db
 
 
 class Country(db.Model):
@@ -7,7 +7,7 @@ class Country(db.Model):
     name = db.Column(db.String(30))
 
     def __repr__(self):
-        return '<Country {}>'.format(self.id)
+        return "<Country {}>".format(self.id)
 
     @staticmethod
     def getCountryFromCode(code):

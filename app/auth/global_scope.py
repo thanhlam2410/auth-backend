@@ -1,4 +1,6 @@
 from flask import Blueprint, request
 from werkzeug import exceptions
+import os
 
-authModule = Blueprint('auth', __name__)
+jwtSecret = os.environ.get("JWT_SECRET_KEY")
+authModule = Blueprint("auth", __name__)
