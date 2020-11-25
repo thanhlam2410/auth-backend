@@ -15,7 +15,7 @@ def token_required():
                 return jsonify({"error": "Unauthorized"}), 401
 
             try:
-                jwtSecret = (current_app.config.get("JWT_SECRET_KEY"),)
+                jwtSecret = current_app.config.get("JWT_SECRET_KEY")
                 data = jwt.decode(token, jwtSecret, algorithms="HS256")
                 session = Session.query.filter_by(sessionId=data["sessionId"]).first()
 

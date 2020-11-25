@@ -47,12 +47,24 @@ class LoginTest(TestCase):
             content_type="application/json",
         )
 
+    def getProfile(self, token: str):
+        return self.client.get(
+            "/profile/me",
+            headers={
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+        )
+
     def test_login(self):
-        response = self.postLogin("lamttt@mailnesia.com", "test password")
-        self.assertEqual(response.status_code, 200)
+        login = self.postLogin("lamttt@mailnesia.com", "test password")
+        self.assertEqual(login.status_code, 200)
 
-        data = json.loads(response.data.decode("utf-8"))
-        self.assertIsNot(data["accessToken"], None)
+        loginData = json.loads(login.data.decode("utf-8"))
+        self.assertIsNot(loginData["accessToken"], None)
 
-        token = jwt.decode(data["accessToken"], "Abc@1234", algorithms="HS256")
+        token = jwt.decode(loginData["accessToken"], "Abc@1234", algorithms="HS256")
         self.assertEqual(str(token["userId"]), "1")
+
+        profile = self.getProfile(token=loginData["accessToken"])
+        self.assertEqual(profile.status_code, 200)
