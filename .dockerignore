@@ -1,0 +1,8 @@
+_pycache__
+tests
+py_auth.postman_collection.json
+.gitignore
+README
+db
+.git
+.vscode

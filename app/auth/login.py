@@ -40,7 +40,7 @@ def doLogin():
     accessToken = generateJWTToken(
         user.id,
         sessionId=sessionId,
-        expire=datetime.datetime.utcnow() + datetime.timedelta(days=1),
+        expire=datetime.datetime.utcnow() + datetime.timedelta(days=7),
         jwtSecret=current_app.config.get("JWT_SECRET_KEY"),
     )
     Session.createSession(userId=user.id, sessionId=sessionId)

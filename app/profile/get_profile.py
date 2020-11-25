@@ -1,6 +1,5 @@
 from flask.json import jsonify
-from app.profile import profileModule
-from werkzeug import exceptions
+from .global_scope import profileModule
 from flask import request
 from app.decorators.token_required import token_required
 
