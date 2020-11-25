@@ -62,9 +62,9 @@ pip install -r requirements.txt
 
 ### Populate .env file
 
-DATABASE_URL=Database Connection String
-ADMIN_PASSWORD=Default Admin Password
-JWT_SECRET_KEY=Secret key for generating JWT token
+- DATABASE_URL=Database Connection String
+- ADMIN_PASSWORD=Default Admin Password
+- JWT_SECRET_KEY=Secret key for generating JWT token
 
 ### Start application
 
