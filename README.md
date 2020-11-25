@@ -31,3 +31,61 @@ pytest
 coverage run -m pytest
 coverage html ./app/**/*.py
 ```
+
+## How to start project
+
+### Install Python3
+
+Recommended version: python 3.9
+
+### Install PIP
+
+### Start Python virtual env
+
+For MAC
+
+```shell
+source <project-dir>/tutorial-env/bin/activate
+```
+
+For Windows
+
+```shell
+<project-dir>/windows-env/Scripts/Activate.ps1
+```
+
+### Install dependencies
+
+```shell
+pip install -r requirements.txt
+```
+
+### Populate .env file
+
+DATABASE_URL=Database Connection String
+ADMIN_PASSWORD=Default Admin Password
+JWT_SECRET_KEY=Secret key for generating JWT token
+
+### Start application
+
+```shell
+flask run
+```
+
+## Following steps will setup database for the first time
+
+### Run database migration
+
+```shell
+flask db upgrade
+```
+
+### Migrate seed data
+
+```shell
+flask seed run
+```
+
+## For testing application
+
+Please use file `py_auth.postman_collection.json`
